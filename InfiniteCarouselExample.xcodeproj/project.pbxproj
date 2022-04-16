@@ -13,6 +13,9 @@
 		483B82CF280AA0E100D5F25F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 483B82CD280AA0E100D5F25F /* Main.storyboard */; };
 		483B82D1280AA0E400D5F25F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 483B82D0280AA0E400D5F25F /* Assets.xcassets */; };
 		483B82D4280AA0E400D5F25F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 483B82D2280AA0E400D5F25F /* LaunchScreen.storyboard */; };
+		483B82DC280AA84800D5F25F /* CustomLaytout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483B82DB280AA84800D5F25F /* CustomLaytout.swift */; };
+		483B82DF280B1AB900D5F25F /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483B82DD280B1AB900D5F25F /* CustomCell.swift */; };
+		483B82E0280B1AB900D5F25F /* CustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 483B82DE280B1AB900D5F25F /* CustomCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		483B82D0280AA0E400D5F25F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		483B82D3280AA0E400D5F25F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		483B82D5280AA0E400D5F25F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		483B82DB280AA84800D5F25F /* CustomLaytout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLaytout.swift; sourceTree = "<group>"; };
+		483B82DD280B1AB900D5F25F /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		483B82DE280B1AB900D5F25F /* CustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,9 @@
 				483B82D0280AA0E400D5F25F /* Assets.xcassets */,
 				483B82D2280AA0E400D5F25F /* LaunchScreen.storyboard */,
 				483B82D5280AA0E400D5F25F /* Info.plist */,
+				483B82DB280AA84800D5F25F /* CustomLaytout.swift */,
+				483B82DD280B1AB900D5F25F /* CustomCell.swift */,
+				483B82DE280B1AB900D5F25F /* CustomCell.xib */,
 			);
 			path = InfiniteCarouselExample;
 			sourceTree = "<group>";
@@ -127,6 +136,7 @@
 			files = (
 				483B82D4280AA0E400D5F25F /* LaunchScreen.storyboard in Resources */,
 				483B82D1280AA0E400D5F25F /* Assets.xcassets in Resources */,
+				483B82E0280B1AB900D5F25F /* CustomCell.xib in Resources */,
 				483B82CF280AA0E100D5F25F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,7 +150,9 @@
 			files = (
 				483B82CC280AA0E100D5F25F /* ViewController.swift in Sources */,
 				483B82C8280AA0E100D5F25F /* AppDelegate.swift in Sources */,
+				483B82DF280B1AB900D5F25F /* CustomCell.swift in Sources */,
 				483B82CA280AA0E100D5F25F /* SceneDelegate.swift in Sources */,
+				483B82DC280AA84800D5F25F /* CustomLaytout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

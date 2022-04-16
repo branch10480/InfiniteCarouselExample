@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol CustomLayoutDelegate: AnyObject {
+  // TODO: サイズ計算に必要な情報のうち外部に問い合わせるメソッドを用意する
+}
+
 final class CustomLayout: UICollectionViewLayout {
+  weak var delegate: CustomLayoutDelegate?
+
   private var attributesArray: [UICollectionViewLayoutAttributes] = []
   private var padding: CGFloat = 10
   private var contentHeight: CGFloat = 0
-  
+
   /// セルの計算をするための処理を記述するメソッド
   /// サイズ情報を保存しておく
   override func prepare() {

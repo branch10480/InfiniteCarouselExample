@@ -62,18 +62,42 @@
 		483B82C6280AA0E100D5F25F /* InfiniteCarouselExample */ = {
 			isa = PBXGroup;
 			children = (
+				483B82E3280B221800D5F25F /* Main */,
+				483B82E2280B220700D5F25F /* Layout */,
+				483B82E1280B21F800D5F25F /* Cell */,
 				483B82C7280AA0E100D5F25F /* AppDelegate.swift */,
 				483B82C9280AA0E100D5F25F /* SceneDelegate.swift */,
-				483B82CB280AA0E100D5F25F /* ViewController.swift */,
-				483B82CD280AA0E100D5F25F /* Main.storyboard */,
 				483B82D0280AA0E400D5F25F /* Assets.xcassets */,
 				483B82D2280AA0E400D5F25F /* LaunchScreen.storyboard */,
 				483B82D5280AA0E400D5F25F /* Info.plist */,
-				483B82DB280AA84800D5F25F /* CustomLaytout.swift */,
+			);
+			path = InfiniteCarouselExample;
+			sourceTree = "<group>";
+		};
+		483B82E1280B21F800D5F25F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
 				483B82DD280B1AB900D5F25F /* CustomCell.swift */,
 				483B82DE280B1AB900D5F25F /* CustomCell.xib */,
 			);
-			path = InfiniteCarouselExample;
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		483B82E2280B220700D5F25F /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				483B82DB280AA84800D5F25F /* CustomLaytout.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		483B82E3280B221800D5F25F /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				483B82CB280AA0E100D5F25F /* ViewController.swift */,
+				483B82CD280AA0E100D5F25F /* Main.storyboard */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

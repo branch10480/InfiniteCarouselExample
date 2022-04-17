@@ -15,6 +15,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var contentView: UIView!
   @IBOutlet weak var positionViewHeight: NSLayoutConstraint!
   @IBOutlet weak var scrollView: UIScrollView!
+  @IBOutlet weak var pageControl: UIPageControl!
 
   private let collectionViewHeight: CGFloat = 200
   private var collectionView: UICollectionView!

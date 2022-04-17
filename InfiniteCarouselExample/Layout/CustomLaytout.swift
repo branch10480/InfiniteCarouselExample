@@ -65,4 +65,41 @@ final class CustomLayout: UICollectionViewLayout {
     }
     return visibleLayoutAttributes
   }
+
+  override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+    guard let collectionView = collectionView else {
+      return proposedContentOffset
+    }
+    let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+    // 表示領域のAttributesを取得
+    guard let targetAttributes = layoutAttributesForElements(in: visibleRect)?.sorted(by: { $0.frame.minX < $1.frame.minX }) else {
+      return proposedContentOffset
+    }
+    let nextAttributes: UICollectionViewLayoutAttributes?
+    if velocity.x == 0 {
+      // スワイプせずに指を離した -> 画面中央から一番近い要素を取得する
+      nextAttributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
+    } else if velocity.x > 0 {
+      // 左スワイプ
+      nextAttributes = targetAttributes.last
+    } else {
+      // 右スワイプ
+      nextAttributes = targetAttributes.first
+    }
+    return nextAttributes?.frame.origin ?? proposedContentOffset
+  }
+
+  private func layoutAttributesForNeabyCenterX(in rect: CGRect, collectionView: UICollectionView) -> UICollectionViewLayoutAttributes? {
+    var currentDistance: CGFloat = .infinity
+    var attributes: UICollectionViewLayoutAttributes?
+    let attributesArray = layoutAttributesForElements(in: rect) ?? []
+    for elm in attributesArray {
+      let distance = abs(elm.frame.midX - rect.midX)
+      if distance < currentDistance {
+        attributes = elm
+        currentDistance = distance
+      }
+    }
+    return attributes
+  }
 }

@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     let layout = CustomLayout(delegate: self)
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
     collectionView.backgroundColor = .secondarySystemBackground
+    collectionView.decelerationRate = .fast
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(collectionView)
     NSLayoutConstraint.activate([

@@ -66,6 +66,7 @@ final class CustomLayout: UICollectionViewLayout {
     return visibleLayoutAttributes
   }
 
+  /// 指を離したときにどの位置まで自動スクロールするかを決める（ページングアニメーション）
   override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
     guard let collectionView = collectionView else {
       return proposedContentOffset
@@ -89,6 +90,7 @@ final class CustomLayout: UICollectionViewLayout {
     return nextAttributes?.frame.origin ?? proposedContentOffset
   }
 
+  /// 表示領域の中央に一番近いLayoutAttributesを返す
   private func layoutAttributesForNeabyCenterX(in rect: CGRect, collectionView: UICollectionView) -> UICollectionViewLayoutAttributes? {
     var currentDistance: CGFloat = .infinity
     var attributes: UICollectionViewLayoutAttributes?

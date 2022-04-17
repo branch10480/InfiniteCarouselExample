@@ -12,6 +12,11 @@ struct Item {
 }
 
 class ViewController: UIViewController {
+  @IBOutlet weak var contentView: UIView!
+  @IBOutlet weak var positionView: UIView!
+  @IBOutlet weak var positionViewHeight: NSLayoutConstraint!
+  @IBOutlet weak var scrollView: UIScrollView!
+
   private let collectionViewHeight: CGFloat = 200
   private var collectionView: UICollectionView!
   private let cellName = "Cell"
@@ -33,17 +38,19 @@ class ViewController: UIViewController {
     collectionView.backgroundColor = .secondarySystemBackground
     collectionView.decelerationRate = .fast
     collectionView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(collectionView)
+    contentView.addSubview(collectionView)
     NSLayoutConstraint.activate([
-      collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight),
+      collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+      collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
     ])
 
     collectionView.register(.init(nibName: "CustomCell", bundle: nil), forCellWithReuseIdentifier: cellName)
     collectionView.dataSource = self
     collectionView.reloadData()
+
+    scrollView.delegate = self
   }
   
 }
@@ -57,6 +64,15 @@ extension ViewController: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellName, for: indexPath) as! CustomCell
     cell.configure(url: data[indexPath.row].imageURL)
     return cell
+  }
+}
+
+extension ViewController: UIScrollViewDelegate {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard scrollView.contentOffset.y <= 0, let layout = collectionView.collectionViewLayout as? CustomLayout else {
+      return
+    }
+    layout.invalidateLayout()
   }
 }
 

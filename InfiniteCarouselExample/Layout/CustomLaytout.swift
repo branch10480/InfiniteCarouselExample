@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CustomLayoutDelegate: AnyObject {
-  // TODO: サイズ計算に必要な情報のうち外部に問い合わせるメソッドを用意する
+  // 必要があればサイズ計算に必要な情報のうち外部に問い合わせるメソッドを用意する
 }
 
 final class CustomLayout: UICollectionViewLayout {
@@ -31,9 +31,11 @@ final class CustomLayout: UICollectionViewLayout {
   override func prepare() {
     super.prepare()
 
-    guard attributesArray.isEmpty, let collectionView = collectionView else {
+    guard let collectionView = collectionView else {
       return
     }
+
+    attributesArray = []
 
     for item in 0..<collectionView.numberOfItems(inSection: 0) {
       let indexPath = IndexPath(item: item, section: 0)

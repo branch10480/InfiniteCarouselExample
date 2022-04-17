@@ -9,10 +9,36 @@ import UIKit
 
 final class CustomLayout: UICollectionViewLayout {
   private var attributesArray: [UICollectionViewLayoutAttributes] = []
-  private var padding: CGFloat = 10
-  private var contentWidth: CGFloat = 0
+
+  private var visibleRectPadding: CGFloat {
+    guard let collectionView = collectionView else { return 0 }
+    return (collectionView.bounds.width - itemWidth) / 2
+  }
+
+  private var contentWidth: CGFloat = 0 {
+    didSet {
+      print("## contentWidth:", contentWidth)
+    }
+  }
   private var contentHeight: CGFloat {
     collectionView?.bounds.height ?? 0
+  }
+
+  private var itemWidth: CGFloat {
+    guard let collectionView = collectionView else { return 0 }
+    let candidate = contentHeight * 16 / 9
+    if candidate > collectionView.bounds.width {
+      return collectionView.bounds.width
+    }
+    return candidate
+  }
+
+  private var itemHeight: CGFloat {
+    collectionView?.bounds.height ?? 0
+  }
+
+  private var itemSize: CGSize {
+    .init(width: itemWidth, height: itemHeight)
   }
 
   var currentIndex: Int? {
@@ -34,11 +60,10 @@ final class CustomLayout: UICollectionViewLayout {
     }
 
     attributesArray = []
+    contentWidth = 0
 
     for item in 0..<collectionView.numberOfItems(inSection: 0) {
       let indexPath = IndexPath(item: item, section: 0)
-      let itemWidth = collectionView.bounds.width
-      let itemHeight = collectionView.bounds.height
       let offset: CGPoint = .init(x: itemWidth * CGFloat(item), y: 0)
       let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
       let frame = CGRect(origin: offset, size: .init(width: itemWidth, height: itemHeight))
@@ -71,12 +96,17 @@ final class CustomLayout: UICollectionViewLayout {
     guard let collectionView = collectionView else {
       return proposedContentOffset
     }
-    let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+    // Paddingを考慮して表示領域を広げる
+    let visibleRect = CGRect(
+      x: collectionView.contentOffset.x - visibleRectPadding,
+      y: 0, width: itemWidth + visibleRectPadding * 2,
+      height: collectionView.bounds.height
+    )
     // 表示領域のAttributesを取得
     guard let targetAttributes = layoutAttributesForElements(in: visibleRect)?.sorted(by: { $0.frame.minX < $1.frame.minX }) else {
       return proposedContentOffset
     }
-    let nextAttributes: UICollectionViewLayoutAttributes?
+    var nextAttributes: UICollectionViewLayoutAttributes?
     if velocity.x == 0 {
       // スワイプせずに指を離した -> 画面中央から一番近い要素を取得する
       nextAttributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
@@ -87,6 +117,8 @@ final class CustomLayout: UICollectionViewLayout {
       // 右スワイプ
       nextAttributes = targetAttributes.first
     }
+    nextAttributes?.frame.origin.x -= visibleRectPadding
+
     return nextAttributes?.frame.origin ?? proposedContentOffset
   }
 

@@ -24,6 +24,9 @@ class ViewController: UIViewController {
     .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
     .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/canada03.jpg"),
     .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
+    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
+    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/canada03.jpg"),
+    .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
   ]
 
   @IBAction func didTapPageControl(_ sender: UIPageControl) {
@@ -75,6 +78,14 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    if scrollView.tag == 1 {
+      // CollectionView内のScrollViewではない
+    } else {
+      // CollectionView内のScrollView
+    }
+  }
+
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     if scrollView.tag == 1 {
       // CollectionView内のScrollViewではない
     } else {

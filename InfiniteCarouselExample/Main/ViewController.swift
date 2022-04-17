@@ -13,7 +13,6 @@ struct Item {
 
 class ViewController: UIViewController {
   @IBOutlet weak var contentView: UIView!
-  @IBOutlet weak var positionView: UIView!
   @IBOutlet weak var positionViewHeight: NSLayoutConstraint!
   @IBOutlet weak var scrollView: UIScrollView!
 
@@ -69,10 +68,8 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    guard scrollView.contentOffset.y <= 0, let layout = collectionView.collectionViewLayout as? CustomLayout else {
-      return
-    }
-    layout.invalidateLayout()
+    guard scrollView.contentOffset.y <= 0 else { return }
+    collectionView.collectionViewLayout.invalidateLayout()
   }
 }
 

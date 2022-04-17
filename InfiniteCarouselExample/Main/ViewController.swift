@@ -17,7 +17,6 @@ class ViewController: UIViewController {
   @IBOutlet weak var scrollView: UIScrollView!
   @IBOutlet weak var pageControl: UIPageControl!
 
-  private let collectionViewHeight: CGFloat = 200
   private var collectionView: UICollectionView!
   private let cellName = "Cell"
 
@@ -27,14 +26,20 @@ class ViewController: UIViewController {
     .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
   ]
 
+  @IBAction func didTapPageControl(_ sender: UIPageControl) {
+    let indexPath = IndexPath(row: sender.currentPage, section: 0)
+    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
   }
   
   private func setup() {
-    let layout = CustomLayout(delegate: self)
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+    pageControl.numberOfPages = data.count
+
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: CustomLayout())
     collectionView.backgroundColor = .secondarySystemBackground
     collectionView.decelerationRate = .fast
     collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +53,7 @@ class ViewController: UIViewController {
 
     collectionView.register(.init(nibName: "CustomCell", bundle: nil), forCellWithReuseIdentifier: cellName)
     collectionView.dataSource = self
+    collectionView.delegate = self
     collectionView.reloadData()
 
     scrollView.delegate = self
@@ -67,12 +73,18 @@ extension ViewController: UICollectionViewDataSource {
   }
 }
 
-extension ViewController: UIScrollViewDelegate {
+extension ViewController: UICollectionViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    guard scrollView.contentOffset.y <= 0 else { return }
-    collectionView.collectionViewLayout.invalidateLayout()
+    if scrollView.tag == 1 {
+      // CollectionView内のScrollViewではない
+    } else {
+      // CollectionView内のScrollView
+      guard scrollView.tag != 1,
+            let layout = collectionView.collectionViewLayout as? CustomLayout,
+            let index = layout.currentIndex else {
+        return
+      }
+      pageControl.currentPage = index
+    }
   }
-}
-
-extension ViewController: CustomLayoutDelegate {
 }

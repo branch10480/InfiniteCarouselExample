@@ -7,13 +7,7 @@
 
 import UIKit
 
-protocol CustomLayoutDelegate: AnyObject {
-  // 必要があればサイズ計算に必要な情報のうち外部に問い合わせるメソッドを用意する
-}
-
 final class CustomLayout: UICollectionViewLayout {
-  weak var delegate: CustomLayoutDelegate?
-
   private var attributesArray: [UICollectionViewLayoutAttributes] = []
   private var padding: CGFloat = 10
   private var contentWidth: CGFloat = 0
@@ -21,16 +15,20 @@ final class CustomLayout: UICollectionViewLayout {
     collectionView?.bounds.height ?? 0
   }
 
-  convenience init(delegate: CustomLayoutDelegate) {
-    self.init()
-    self.delegate = delegate
+  var currentIndex: Int? {
+    guard let collectionView = collectionView else { return nil }
+    let visibleRect = CGRect(origin: .init(x: collectionView.contentOffset.x, y: 0), size: collectionView.bounds.size)
+    let attributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
+    return attributes?.indexPath.row
+  }
+
+  override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    true
   }
 
   /// セルの計算をするための処理を記述するメソッド
   /// サイズ情報を保存しておく
   override func prepare() {
-    super.prepare()
-
     guard let collectionView = collectionView else {
       return
     }

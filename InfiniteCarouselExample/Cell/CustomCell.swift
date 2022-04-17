@@ -16,13 +16,15 @@ class CustomCell: UICollectionViewCell {
   }
   
   private func setup() {
+    imageView.contentMode = .scaleAspectFill
   }
   
   func configure(url urlString: String) {
     guard let url = URL(string: urlString), let data = try? Data(contentsOf: url) else {
       return
     }
-    imageView.image = UIImage(data: data)
+    let image = UIImage(data: data)
+    imageView.image = image
   }
   
 }

@@ -17,9 +17,9 @@ class ViewController: UIViewController {
   private let cellName = "Cell"
 
   private var data: [Item] = [
-    .init(imageURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tabikobo.com%2Fspecial%2Fzekkei%2F&psig=AOvVaw20xgrMgDAKXcjjWGuHN9HO&ust=1650210345188000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICIst32mPcCFQAAAAAdAAAAABAD"),
-    .init(imageURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.jalan.net%2Fnews%2Farticle%2F219249%2F&psig=AOvVaw20xgrMgDAKXcjjWGuHN9HO&ust=1650210345188000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICIst32mPcCFQAAAAAdAAAAABAI"),
-    .init(imageURL: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tabikobo.com%2Fspecial%2Fzekkei%2F&psig=AOvVaw20xgrMgDAKXcjjWGuHN9HO&ust=1650210345188000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICIst32mPcCFQAAAAAdAAAAABAO"),
+    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
+    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/canada03.jpg"),
+    .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
   ]
 
   override func viewDidLoad() {
@@ -28,7 +28,7 @@ class ViewController: UIViewController {
   }
   
   private func setup() {
-    let layout = CustomLayout()
+    let layout = CustomLayout(delegate: self)
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
     collectionView.backgroundColor = .secondarySystemBackground
     collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,3 +59,5 @@ extension ViewController: UICollectionViewDataSource {
   }
 }
 
+extension ViewController: CustomLayoutDelegate {
+}

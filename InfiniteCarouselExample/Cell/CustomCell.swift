@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CustomCell: UICollectionViewCell {
   @IBOutlet weak var imageView: UIImageView!
@@ -20,11 +21,8 @@ class CustomCell: UICollectionViewCell {
   }
   
   func configure(url urlString: String) {
-    guard let url = URL(string: urlString), let data = try? Data(contentsOf: url) else {
-      return
-    }
-    let image = UIImage(data: data)
-    imageView.image = image
+    guard let url = URL(string: urlString) else { return }
+    imageView.sd_setImage(with: url)
   }
   
 }

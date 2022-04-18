@@ -19,6 +19,7 @@ class ViewController: UIViewController {
 
   private var collectionView: UICollectionView!
   private let cellName = "Cell"
+  private let refreshControl = CustomRefreshControl()
 
   private var data: [Item] = [
     .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
@@ -42,9 +43,11 @@ class ViewController: UIViewController {
   private func setup() {
     pageControl.numberOfPages = data.count
 
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: CustomLayout())
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: CustomLayout(delegate: self))
     collectionView.backgroundColor = .secondarySystemBackground
     collectionView.decelerationRate = .fast
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.showsHorizontalScrollIndicator = false
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(collectionView)
     NSLayoutConstraint.activate([
@@ -60,6 +63,15 @@ class ViewController: UIViewController {
     collectionView.reloadData()
 
     scrollView.delegate = self
+    scrollView.refreshControl = refreshControl
+
+    refreshControl.addTarget(self, action: #selector(refreshControl(_:)), for: .valueChanged)
+    refreshControl.tintColor = .gray
+    scrollView.bringSubviewToFront(refreshControl)
+  }
+
+  @objc private func refreshControl(_ sender: UIRefreshControl) {
+    refreshControl.endRefreshing()
   }
   
 }
@@ -97,5 +109,11 @@ extension ViewController: UICollectionViewDelegate {
       }
       pageControl.currentPage = index
     }
+  }
+}
+
+extension ViewController: CustomLayoutDelegate {
+  var parentScrollViewContentOffsetY: CGFloat {
+    scrollView.contentOffset.y
   }
 }

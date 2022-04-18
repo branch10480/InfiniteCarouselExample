@@ -8,6 +8,7 @@
 import UIKit
 
 final class CustomLayout: UICollectionViewLayout {
+  private weak var delegate: CustomLayoutDelegate?
   private var attributesArray: [UICollectionViewLayoutAttributes] = []
 
   private var visibleRectPadding: CGFloat {
@@ -15,17 +16,18 @@ final class CustomLayout: UICollectionViewLayout {
     return (collectionView.bounds.width - itemWidth) / 2
   }
 
-  private var contentWidth: CGFloat = 0 {
-    didSet {
-      print("## contentWidth:", contentWidth)
-    }
-  }
+  private var contentWidth: CGFloat = 0
   private var contentHeight: CGFloat {
     collectionView?.bounds.height ?? 0
   }
 
   private var itemWidth: CGFloat {
     guard let collectionView = collectionView else { return 0 }
+
+    if UIDevice.current.userInterfaceIdiom == .phone {
+      return collectionView.bounds.width
+    }
+
     let candidate = contentHeight * 16 / 9
     if candidate > collectionView.bounds.width {
       return collectionView.bounds.width
@@ -48,6 +50,15 @@ final class CustomLayout: UICollectionViewLayout {
     return attributes?.indexPath.row
   }
 
+  init(delegate: CustomLayoutDelegate) {
+    super.init()
+    self.delegate = delegate
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
     true
   }
@@ -66,11 +77,16 @@ final class CustomLayout: UICollectionViewLayout {
       let indexPath = IndexPath(item: item, section: 0)
       let offset: CGPoint = .init(x: itemWidth * CGFloat(item), y: 0)
       let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-      let frame = CGRect(origin: offset, size: .init(width: itemWidth, height: itemHeight))
+      let frame = CGRect(origin: offset, size: itemSize)
       attributes.frame = frame
       attributesArray.append(attributes)
       contentWidth = max(contentWidth, frame.maxX)
     }
+//    print("## contentOffsetY:", collectionView.contentOffset.y)
+//    print("## scrollView contentOffset:Y", delegate?.parentScrollViewContentOffsetY ?? -1)
+//    print("## ------------")
+
+//    collectionView.contentInset.left = (delegate?.parentScrollViewContentOffsetY ?? 0) * 16 / 9
   }
   
   /// ScrollViewのcontentSizeと同じ
@@ -136,4 +152,8 @@ final class CustomLayout: UICollectionViewLayout {
     }
     return attributes
   }
+}
+
+protocol CustomLayoutDelegate: AnyObject {
+  var parentScrollViewContentOffsetY: CGFloat { get }
 }

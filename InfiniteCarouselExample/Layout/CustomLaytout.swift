@@ -46,7 +46,7 @@ final class CustomLayout: UICollectionViewLayout {
   var currentIndex: Int? {
     guard let collectionView = collectionView else { return nil }
     let visibleRect = CGRect(origin: .init(x: collectionView.contentOffset.x, y: 0), size: collectionView.bounds.size)
-    let attributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
+    let attributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView).0
     return attributes?.indexPath.row
   }
 
@@ -114,24 +114,33 @@ final class CustomLayout: UICollectionViewLayout {
     }
     // Paddingを考慮して表示領域を広げる
     let visibleRect = CGRect(
-      x: collectionView.contentOffset.x - visibleRectPadding,
-      y: 0, width: itemWidth + visibleRectPadding * 2,
+      x: collectionView.contentOffset.x,
+      y: 0, width: itemWidth + visibleRectPadding,
       height: collectionView.bounds.height
     )
     // 表示領域のAttributesを取得
     guard let targetAttributes = layoutAttributesForElements(in: visibleRect)?.sorted(by: { $0.frame.minX < $1.frame.minX }) else {
       return proposedContentOffset
     }
-    var nextAttributes: UICollectionViewLayoutAttributes?
+    let tuple = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
+    var nextAttributes: UICollectionViewLayoutAttributes? = tuple.0
+    let index = tuple.1
     if velocity.x == 0 {
       // スワイプせずに指を離した -> 画面中央から一番近い要素を取得する
-      nextAttributes = layoutAttributesForNeabyCenterX(in: visibleRect, collectionView: collectionView)
     } else if velocity.x > 0 {
       // 左スワイプ
-      nextAttributes = targetAttributes.last
+      if let index = index, index + 1 < targetAttributes.count {
+        nextAttributes = targetAttributes[index + 1]
+      } else {
+        nextAttributes = targetAttributes.last
+      }
     } else {
       // 右スワイプ
-      nextAttributes = targetAttributes.first
+      if let index = index, index - 1 >= 0 {
+        nextAttributes = targetAttributes[index - 1]
+      } else {
+        nextAttributes = targetAttributes.first
+      }
     }
     nextAttributes?.frame.origin.x -= visibleRectPadding
 
@@ -139,18 +148,20 @@ final class CustomLayout: UICollectionViewLayout {
   }
 
   /// 表示領域の中央に一番近いLayoutAttributesを返す
-  private func layoutAttributesForNeabyCenterX(in rect: CGRect, collectionView: UICollectionView) -> UICollectionViewLayoutAttributes? {
+  private func layoutAttributesForNeabyCenterX(in rect: CGRect, collectionView: UICollectionView) -> (UICollectionViewLayoutAttributes?, Int?) {
     var currentDistance: CGFloat = .infinity
     var attributes: UICollectionViewLayoutAttributes?
     let attributesArray = layoutAttributesForElements(in: rect) ?? []
-    for elm in attributesArray {
+    var index: Int?
+    for (i, elm) in attributesArray.enumerated() {
       let distance = abs(elm.frame.midX - rect.midX)
       if distance < currentDistance {
         attributes = elm
         currentDistance = distance
+        index = i
       }
     }
-    return attributes
+    return (attributes, index)
   }
 }
 

@@ -22,12 +22,15 @@ class ViewController: UIViewController {
   private let refreshControl = CustomRefreshControl()
 
   private var data: [Item] = [
-    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
-    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/canada03.jpg"),
-    .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
-    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/main.jpg"),
-    .init(imageURL: "https://www.tabikobo.com/special/zekkei/images/canada03.jpg"),
-    .init(imageURL: "https://www.jalan.net/news/img/2021/04/20210402_zekkei_030-670x443.jpg"),
+    .init(imageURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0M0nxkQHf_JI4IRgd1_gV-VO02Xsx3IJeQA&usqp=CAU"),
+    .init(imageURL: "https://1.bp.blogspot.com/-xnNU3RpKFc0/XtD_BJLtXkI/AAAAAAAAB4o/qyyGBKoMRcEBQb3dsfrfbQY5hU7j9Q_fwCLcBGAsYHQ/s1600/16-9.jpg"),
+    .init(imageURL: "https://st.depositphotos.com/2012555/1934/i/950/depositphotos_19342771-stock-photo-winter-landscape-with-little-house.jpg"),
+    .init(imageURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0M0nxkQHf_JI4IRgd1_gV-VO02Xsx3IJeQA&usqp=CAU"),
+    .init(imageURL: "https://1.bp.blogspot.com/-xnNU3RpKFc0/XtD_BJLtXkI/AAAAAAAAB4o/qyyGBKoMRcEBQb3dsfrfbQY5hU7j9Q_fwCLcBGAsYHQ/s1600/16-9.jpg"),
+    .init(imageURL: "https://st.depositphotos.com/2012555/1934/i/950/depositphotos_19342771-stock-photo-winter-landscape-with-little-house.jpg"),
+    .init(imageURL: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0M0nxkQHf_JI4IRgd1_gV-VO02Xsx3IJeQA&usqp=CAU"),
+    .init(imageURL: "https://1.bp.blogspot.com/-xnNU3RpKFc0/XtD_BJLtXkI/AAAAAAAAB4o/qyyGBKoMRcEBQb3dsfrfbQY5hU7j9Q_fwCLcBGAsYHQ/s1600/16-9.jpg"),
+    .init(imageURL: "https://st.depositphotos.com/2012555/1934/i/950/depositphotos_19342771-stock-photo-winter-landscape-with-little-house.jpg"),
   ]
 
   @IBAction func didTapPageControl(_ sender: UIPageControl) {
@@ -39,7 +42,19 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     setup()
   }
-  
+
+  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+
+    coordinator.animate(alongsideTransition: nil, completion: { [weak self] _ in
+      guard let self = self, let layout = self.collectionView.collectionViewLayout as? CustomLayout,
+            let index = layout.currentIndex else {
+        return
+      }
+      self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: true)
+    })
+  }
+
   private func setup() {
     pageControl.numberOfPages = data.count
 
@@ -94,6 +109,12 @@ extension ViewController: UICollectionViewDelegate {
       // CollectionView内のScrollViewではない
     } else {
       // CollectionView内のScrollView
+      guard scrollView.tag != 1,
+            let layout = collectionView.collectionViewLayout as? CustomLayout,
+            let index = layout.currentIndex else {
+        return
+      }
+      pageControl.currentPage = index
     }
   }
 
@@ -102,12 +123,6 @@ extension ViewController: UICollectionViewDelegate {
       // CollectionView内のScrollViewではない
     } else {
       // CollectionView内のScrollView
-      guard scrollView.tag != 1,
-            let layout = collectionView.collectionViewLayout as? CustomLayout,
-            let index = layout.currentIndex else {
-        return
-      }
-      pageControl.currentPage = index
     }
   }
 }

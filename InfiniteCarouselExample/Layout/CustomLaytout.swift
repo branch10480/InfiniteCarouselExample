@@ -22,17 +22,19 @@ final class CustomLayout: UICollectionViewLayout {
   }
 
   private var itemWidth: CGFloat {
-    guard let collectionView = collectionView else { return 0 }
+    return 480
 
-    if UIDevice.current.userInterfaceIdiom == .phone {
-      return collectionView.bounds.width
-    }
-
-    let candidate = contentHeight * 16 / 9
-    if candidate > collectionView.bounds.width {
-      return collectionView.bounds.width
-    }
-    return candidate
+//    guard let collectionView = collectionView else { return 0 }
+//
+//    if UIDevice.current.userInterfaceIdiom == .phone {
+//      return collectionView.bounds.width
+//    }
+//
+//    let candidate = contentHeight * 16 / 9
+//    if candidate > collectionView.bounds.width {
+//      return collectionView.bounds.width
+//    }
+//    return candidate
   }
 
   private var itemHeight: CGFloat {
@@ -115,7 +117,7 @@ final class CustomLayout: UICollectionViewLayout {
     // Paddingを考慮して表示領域を広げる
     let visibleRect = CGRect(
       x: collectionView.contentOffset.x,
-      y: 0, width: itemWidth + visibleRectPadding,
+      y: 0, width: itemWidth + visibleRectPadding * 2,
       height: collectionView.bounds.height
     )
     // 表示領域のAttributesを取得
